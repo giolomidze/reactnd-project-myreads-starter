@@ -68,7 +68,7 @@ class BooksApp extends React.Component {
                         </div>
                         <div className="list-books-content">
                             {this.state.shelves.map(shelf => (
-                                <ListBooks
+                                <ListBooks key={shelf.type}
                                     books={this.state.books}
                                     shelf={shelf}
                                 />
