@@ -58,7 +58,6 @@ export class ListBooks extends Component {
                                     </div>
                                 </li>
                             ))}
-                        <li />
                     </ol>
                 </div>
             </div>
