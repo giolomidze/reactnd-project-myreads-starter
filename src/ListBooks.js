@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 
-export class ListBooks extends Component {
+class ListBooks extends Component {
     render() {
         const { books, shelf } = this.props;
         return (
@@ -28,6 +28,7 @@ export class ListBooks extends Component {
                                             />
                                             <div className="book-shelf-changer">
                                                 <select
+                                                    value={book.shelf}
                                                     onChange={event =>
                                                         this.props.updateShelf(
                                                             book,
