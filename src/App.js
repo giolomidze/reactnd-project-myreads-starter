@@ -27,6 +27,37 @@ class BooksApp extends React.Component {
             });
         });
     }
+    updateBook = shelvesPerBookIds => {
+        let that = this;
+        let updatedBooks = [];
+        Object.keys(shelvesPerBookIds).forEach(function(bookId, shelf) {
+            const shelfResult = shelvesPerBookIds[bookId];
+            console.log('bookId: ', bookId);
+            console.log('shelf: ', shelfResult);
+            updatedBooks = that.state.books.map(book => {
+                if (book.id === bookId) {
+                    book.shelf = shelfResult;
+                }
+                return book;
+            });
+        });
+        that.setState({
+            books: updatedBooks,
+        });
+    };
+    updateShelf = (book, shelf) => {
+        let updatedShelves = {};
+        console.log(book, shelf);
+        let that = this;
+        BooksAPI.update(book, shelf).then(result => {
+            Object.keys(result).forEach(function(shelf) {
+                result[shelf].forEach(function(bookId) {
+                    updatedShelves[bookId] = shelf;
+                });
+            });
+            that.updateBook(updatedShelves);
+        });
+    };
 
     render() {
         return (
@@ -68,14 +99,21 @@ class BooksApp extends React.Component {
                         </div>
                         <div className="list-books-content">
                             {this.state.shelves.map(shelf => (
-                                <ListBooks key={shelf.type}
+                                <ListBooks
+                                    key={shelf.type}
                                     books={this.state.books}
                                     shelf={shelf}
+                                    updateShelf={this.updateShelf}
                                 />
                             ))}
                         </div>
                     </div>
                 )}
+                <div className="open-search">
+                    <a onClick={() => this.setState({ showSearchPage: true })}>
+                        Add a book
+                    </a>
+                </div>
             </div>
         );
     }

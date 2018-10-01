@@ -27,7 +27,14 @@ export class ListBooks extends Component {
                                                 }}
                                             />
                                             <div className="book-shelf-changer">
-                                                <select>
+                                                <select
+                                                    onChange={event =>
+                                                        this.props.updateShelf(
+                                                            book,
+                                                            event.target.value
+                                                        )
+                                                    }
+                                                >
                                                     <option
                                                         value="move"
                                                         disabled
