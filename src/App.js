@@ -30,10 +30,8 @@ class BooksApp extends React.Component {
     updateBook = shelvesPerBookIds => {
         let that = this;
         let updatedBooks = [];
-        Object.keys(shelvesPerBookIds).forEach(function(bookId, shelf) {
+        Object.keys(shelvesPerBookIds).forEach(function(bookId) {
             const shelfResult = shelvesPerBookIds[bookId];
-            console.log('bookId: ', bookId);
-            console.log('shelf: ', shelfResult);
             updatedBooks = that.state.books.map(book => {
                 if (book.id === bookId) {
                     book.shelf = shelfResult;
@@ -45,16 +43,24 @@ class BooksApp extends React.Component {
             books: updatedBooks,
         });
     };
+
     updateShelf = (book, shelf) => {
         let updatedShelves = {};
-        console.log(book, shelf);
         let that = this;
         BooksAPI.update(book, shelf).then(result => {
-            Object.keys(result).forEach(function(shelf) {
-                result[shelf].forEach(function(bookId) {
-                    updatedShelves[bookId] = shelf;
+            if (shelf === 'none') {
+                this.setState(currentState => ({
+                    books: currentState.books.filter(b => {
+                        return b.id !== book.id;
+                    }),
+                }));
+            }
+            Object.keys(result).forEach(function(receivedShelfs) {
+                result[receivedShelfs].forEach(function(bookId) {
+                    updatedShelves[bookId] = receivedShelfs;
                 });
             });
+            console.log(updatedShelves);
             that.updateBook(updatedShelves);
         });
     };
