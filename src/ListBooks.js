@@ -15,7 +15,11 @@ class ListBooks extends Component {
                   style={{
                     width: 128,
                     height: 193,
-                    backgroundImage: `url(${book.imageLinks.thumbnail})`,
+                    backgroundImage: `url(${
+                      book.imageLinks && book.imageLinks.thumbnail
+                        ? book.imageLinks.thumbnail
+                        : ''
+                    })`,
                   }}
                 />
                 <div className="book-shelf-changer">
@@ -37,7 +41,7 @@ class ListBooks extends Component {
               </div>
               <div className="book-title">{book.title}</div>
               <div className="book-authors">
-                {book.authors.map(author => author)}
+                {book.authors ? book.authors.map(author => author) : ''}
               </div>
             </div>
           </li>
