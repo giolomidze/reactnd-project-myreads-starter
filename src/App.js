@@ -56,7 +56,6 @@ class BooksApp extends React.Component {
           updatedShelves[bookId] = receivedShelfs;
         });
       });
-      console.log(updatedShelves);
       that.updateBook(updatedShelves);
     });
   };
@@ -65,7 +64,15 @@ class BooksApp extends React.Component {
     return (
       <BrowserRouter>
         <div className="app">
-          <Route path="/search" render={() => <Search />} />
+          <Route
+            path="/search"
+            render={() => (
+              <Search
+                booksOnShelf={this.state.books}
+                updateShelf={this.updateShelf}
+              />
+            )}
+          />
           <Route
             exact
             path="/"

@@ -1,8 +1,33 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './App.css';
+import * as BooksAPI from './BooksAPI';
+import ListBooks from './ListBooks';
 
 class Search extends Component {
+  state = {
+    query: '',
+    books: [],
+  };
+
+  lookUpBooks = query => {
+    const trimmedQuery = query.trim();
+    if (trimmedQuery.length === 0) {
+      this.setState({ books: [] });
+    }
+    BooksAPI.search(trimmedQuery)
+      .then(books => {
+        if (books.error === 'empty query') {
+          this.setState({ books: [] });
+        } else {
+          this.setState({ books: books });
+        }
+      })
+      .catch(() => {
+        this.setState({ books: [] });
+      });
+  };
+
   render() {
     return (
       <div className="search-books">
@@ -11,20 +36,19 @@ class Search extends Component {
             Close
           </Link>
           <div className="search-books-input-wrapper">
-            {/*
-                NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                You can find these search terms here:
-                https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                you don't find a specific author or title. Every search is limited by search terms.
-              */}
-            <input type="text" placeholder="Search by title or author" />
+            <input
+              onChange={e => this.lookUpBooks(e.target.value)}
+              name="search"
+              type="text"
+              placeholder="Search by title or author"
+            />
           </div>
         </div>
-        <div className="search-books-results">
-          <ol className="books-grid" />
-        </div>
+        <div className="search-books-results" />
+        <ListBooks
+          books={this.state.books}
+          updateShelf={this.props.updateShelf}
+        />
       </div>
     );
   }
