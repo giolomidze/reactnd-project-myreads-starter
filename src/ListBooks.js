@@ -3,10 +3,10 @@ import './App.css';
 
 class ListBooks extends Component {
   render() {
-    const { books, shelf } = this.props;
+    const { books } = this.props;
     return (
       <ol className="books-grid">
-        {books.filter(book => book.shelf === shelf.type).map(book => (
+        {books.map(book => (
           <li key={book.id}>
             <div className="book">
               <div className="book-top">
