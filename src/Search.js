@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './App.css';
 import * as BooksAPI from './BooksAPI';
 import ListBooks from './ListBooks';
+import PropTypes from 'prop-types';
 
 class Search extends Component {
   state = {
@@ -64,5 +65,10 @@ class Search extends Component {
     );
   }
 }
+
+Search.propTypes = {
+  userBooks: PropTypes.array.isRequired,
+  changeShelf: PropTypes.func.isRequired,
+};
 
 export default Search;

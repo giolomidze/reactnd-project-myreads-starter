@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import ListBooks from './ListBooks';
+import PropTypes from 'prop-types';
 
 class Shelf extends Component {
   render() {
@@ -16,5 +17,10 @@ class Shelf extends Component {
     );
   }
 }
+
+Shelf.propTypes = {
+  shelf: PropTypes.object.isRequired,
+  changeShelf: PropTypes.func.isRequired,
+};
 
 export default Shelf;
