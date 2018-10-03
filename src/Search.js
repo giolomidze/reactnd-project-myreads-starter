@@ -11,21 +11,32 @@ class Search extends Component {
   };
 
   lookUpBooks = query => {
+    const { userBooks } = this.props;
+
     const trimmedQuery = query.trim();
+
     if (trimmedQuery.length === 0) {
       this.setState({ books: [] });
-    }
-    BooksAPI.search(trimmedQuery)
-      .then(books => {
-        if (books.error === 'empty query') {
+    } else {
+      BooksAPI.search(trimmedQuery)
+        .then(books => {
+          if (books.error) {
+            this.setState({ books: [] });
+          } else {
+            books.map(booksFromSearchResults =>
+              userBooks
+                .filter(userBook => userBook.id === booksFromSearchResults.id)
+                .map(
+                  userBook => (booksFromSearchResults.shelf = userBook.shelf)
+                )
+            );
+            this.setState({ books: books });
+          }
+        })
+        .catch(() => {
           this.setState({ books: [] });
-        } else {
-          this.setState({ books: books });
-        }
-      })
-      .catch(() => {
-        this.setState({ books: [] });
-      });
+        });
+    }
   };
 
   render() {
@@ -47,7 +58,7 @@ class Search extends Component {
         <div className="search-books-results" />
         <ListBooks
           books={this.state.books}
-          updateShelf={this.props.updateShelf}
+          changeShelf={this.props.changeShelf}
         />
       </div>
     );

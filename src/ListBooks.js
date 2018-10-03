@@ -3,7 +3,7 @@ import './App.css';
 
 class ListBooks extends Component {
   render() {
-    const { books } = this.props;
+    const { books, changeShelf } = this.props;
     return (
       <ol className="books-grid">
         {books.map(book => (
@@ -25,9 +25,7 @@ class ListBooks extends Component {
                 <div className="book-shelf-changer">
                   <select
                     value={book.shelf}
-                    onChange={event =>
-                      this.props.updateShelf(book, event.target.value)
-                    }
+                    onChange={event => changeShelf(book, event.target.value)}
                   >
                     <option value="move" disabled>
                       Move to...

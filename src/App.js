@@ -1,9 +1,9 @@
 import React from 'react';
-import * as BooksAPI from './BooksAPI';
-import './App.css';
 import { BrowserRouter, Link, Route } from 'react-router-dom';
-import Shelf from './Shelf';
+import './App.css';
+import * as BooksAPI from './BooksAPI';
 import Search from './Search';
+import Shelf from './Shelf';
 
 class BooksApp extends React.Component {
   state = {
@@ -23,40 +23,12 @@ class BooksApp extends React.Component {
     });
   }
 
-  updateBook = shelvesPerBookIds => {
-    let that = this;
-    let updatedBooks = [];
-    Object.keys(shelvesPerBookIds).forEach(function(bookId) {
-      const shelfResult = shelvesPerBookIds[bookId];
-      updatedBooks = that.state.books.map(book => {
-        if (book.id === bookId) {
-          book.shelf = shelfResult;
-        }
-        return book;
-      });
-    });
-    that.setState({
-      books: updatedBooks,
-    });
-  };
-
-  updateShelf = (book, shelf) => {
-    let updatedShelves = {};
-    let that = this;
-    BooksAPI.update(book, shelf).then(result => {
-      if (shelf === 'none') {
-        this.setState(currentState => ({
-          books: currentState.books.filter(b => {
-            return b.id !== book.id;
-          }),
-        }));
-      }
-      Object.keys(result).forEach(function(receivedShelfs) {
-        result[receivedShelfs].forEach(function(bookId) {
-          updatedShelves[bookId] = receivedShelfs;
-        });
-      });
-      that.updateBook(updatedShelves);
+  changeShelf = (book, shelf) => {
+    BooksAPI.update(book, shelf).then(() => {
+      book.shelf = shelf;
+      this.setState(state => ({
+        books: state.books.filter(b => b.id !== book.id).concat([book]),
+      }));
     });
   };
 
@@ -68,8 +40,8 @@ class BooksApp extends React.Component {
             path="/search"
             render={() => (
               <Search
-                booksOnShelf={this.state.books}
-                updateShelf={this.updateShelf}
+                userBooks={this.state.books}
+                changeShelf={this.changeShelf}
               />
             )}
           />
@@ -87,7 +59,7 @@ class BooksApp extends React.Component {
                       key={shelf.title}
                       books={this.state.books}
                       shelf={shelf}
-                      updateShelf={this.updateShelf}
+                      changeShelf={this.changeShelf}
                     />
                   ))}
                 </div>
