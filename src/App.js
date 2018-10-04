@@ -23,6 +23,10 @@ class BooksApp extends React.Component {
     });
   }
 
+  /**
+   * @param  {Array} book
+   * @param  {String} shelf
+   */
   changeShelf = (book, shelf) => {
     BooksAPI.update(book, shelf).then(() => {
       book.shelf = shelf;

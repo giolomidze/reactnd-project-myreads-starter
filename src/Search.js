@@ -11,6 +11,13 @@ class Search extends Component {
     books: [],
   };
 
+  /**
+   * Looks up books through API by passing a query.
+   * Received results are being mapped and filtered based on the existing
+   * books in application's parent state to maintain the information
+   * of current shelf selections.
+   * @param  {String} query
+   */
   lookUpBooks = query => {
     const { userBooks } = this.props;
 
