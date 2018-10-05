@@ -31,6 +31,9 @@ class Search extends Component {
           if (books.error) {
             this.setState({ books: [] });
           } else {
+            books.forEach(function(book, index) {
+              books[index].shelf = 'none';
+            });
             books.map(booksFromSearchResults =>
               userBooks
                 .filter(userBook => userBook.id === booksFromSearchResults.id)
